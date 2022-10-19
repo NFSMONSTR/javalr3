@@ -52,6 +52,9 @@ src/main/java/ru/rsatu/reflect::
 src/main/java/ru/rsatu/collections::
 Задание 3
 
+src/main/java/ru/rsatu/generics::
+Задание 4
+
 == 3. Информация о реализации
 
 === 3.1 Задание 1
@@ -411,26 +414,101 @@ key number: 3 value string: 3
 ----
 == 3.4 Задание 4
 
-...
+Для выполнения задания 4 созданим Generic-класс Pair
+
+.Класс Pair
+[source, java]
+----
+package ru.rsatu.generics;
+
+public class Pair<F, S> {
+
+    private final F first;
+    private final S second;
+
+    public Pair(F first, S second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public F getFirst()    {
+        return first;
+    }
+    public S getSecond() {
+        return second;
+    }
+}
+----
+
+Так же создадим класс Reverse с generic-методом reverseGeneric, который будет возвращать список в обратном порядке.
+
+.Класс Reverse
+[source, java]
+----
+package ru.rsatu.generics;
+
+import java.util.Collections;
+import java.util.List;
+
+public class Reverse {
+    public static <T> List<T> reverseGeneric(List<T> list) {
+        List<T> copyList = list.subList(0, list.size());
+        Collections.reverse(copyList);
+        return copyList;
+    }
+}
+----
+
+Для демонстрации их работы добавим следующий код в класс Main
+
+.Изменения в классе Main
+[source, java]
+----
+List<Pair<String, Money>> money = Arrays.asList(
+        new Pair<>(m1.toString(), m1),
+        new Pair<>(m2.toString(), m2)
+);
+
+for (Pair<String, Money> m : money) {
+    System.out.println(m.getFirst() + ": " + m.getSecond().getValue());
+}
+
+List<Pair<String, Money>> reversed = Reverse.reverseGeneric(money);
+System.out.println("Reversed list:");
+
+reversed.forEach((m) -> System.out.println(m.getFirst() + ": " + m.getSecond().getValue()));
+----
+
+.Результат работы
+[source]
+----
+Euro: 100.0: 100.0
+Parent Dollar: 100.0: 100.0
+Reversed list:
+Parent Dollar: 100.0: 100.0
+Euro: 100.0: 100.0
+----
 
 == 4. Результаты выполнения
 
-В результате выполнения первого задания был получен класс HelloWorld.
-При запуске выводится строка:
+В результате выполнения лабораторной работы были создан интерфейс `MoneyInterface`, классы `Money`, `Dollar`, `Euro`, `Dump`, `Collections`, `Pair`, `Reverse`, `Main`.
 
+В классе `Main` содержится демонстрация работы всех остальных классов:
+
+.Результат выполнения первого задания
 image::images/1.png[]
 
-В результате выполнения второго задания были получены классы main и HelloWorld.
-При запуске main выводятся строки:
-
+.Результат выполнения второго задания
 image::images/2.png[]
+.Результат выполнения второго задания
+image::images/2.2.png[]
 
-В результате выполнения третьего задания был получен jar-файл main.jar.
-При запуске jar-файла выводятся строки:
-
+.Результат выполнения третьего задания
 image::images/3.png[]
+
+.Результат выполнения четвертого задания
+image::images/4.png[]
 
 == 5. Вывод
 
-В результате выполнения лабораторной работы получены навыки по компиляции классов,
-запуску проектов, созданию jar-файлов с помощью командной строки.
+В результате выполнения лабораторной работы получены навыки по работе с ООП (создание интерфейсов, абстрактных классов, классов-наследников, классов имплементирующих интерфейс), использованию Reflection (получение полей и методов класса, вызов методов, просмотр предков класса), взаимодействию со стандартными коллекциями (list, set, map), созданию generic-классов и методов.

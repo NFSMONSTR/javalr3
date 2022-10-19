@@ -2,8 +2,12 @@ package ru.rsatu;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 import ru.rsatu.collections.Collections;
+import ru.rsatu.generics.Pair;
+import ru.rsatu.generics.Reverse;
 import ru.rsatu.oop.Dollar;
 import ru.rsatu.oop.Euro;
 import ru.rsatu.oop.Money;
@@ -40,5 +44,22 @@ public class Main {
         System.out.println();
 
         Collections.demo();
+
+        System.out.println();
+
+        List<Pair<String, Money>> money = Arrays.asList(
+                new Pair<>(m1.toString(), m1),
+                new Pair<>(m2.toString(), m2)
+        );
+
+        for (Pair<String, Money> m : money) {
+            System.out.println(m.getFirst() + ": " + m.getSecond().getValue());
+        }
+
+        List<Pair<String, Money>> reversed = Reverse.reverseGeneric(money);
+        System.out.println("Reversed list:");
+
+        reversed.forEach((m) -> System.out.println(m.getFirst() + ": " + m.getSecond().getValue()));
+
     }
 }
