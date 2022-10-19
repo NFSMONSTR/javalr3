@@ -3,6 +3,7 @@ package ru.rsatu;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import ru.rsatu.collections.Collections;
 import ru.rsatu.oop.Dollar;
 import ru.rsatu.oop.Euro;
 import ru.rsatu.oop.Money;
@@ -35,5 +36,9 @@ public class Main {
 
         Dump.printAllParents(m1.getClass());
         Dump.printAllParents(m2.getClass());
+
+        System.out.println();
+
+        Collections.demo();
     }
 }
