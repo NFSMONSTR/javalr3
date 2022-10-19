@@ -49,6 +49,8 @@ src/main/java/ru/rsatu/oop:::
 src/main/java/ru/rsatu/reflect::
 Задание 2
 
+src/main/java/ru/rsatu/collections::
+Задание 3
 
 == 3. Информация о реализации
 
@@ -174,11 +176,6 @@ Euro: 100.0 is bigger Parent Dollar: 100.0: -1
 .Класс Dump
 [source,java]
 ----
-package ru.rsatu.reflect;
-
-import java.lang.reflect.*;
-
-
 public class Dump {
     public static void dumpEverything(String className) {
         try {
@@ -199,13 +196,130 @@ public class Dump {
         }
     }
 
-    public static void callSomeMethods() {
+    public static Method getSomeMethod(Class<?> cls, String methodName, Class... parameterTypes) {
+        try {
+            return cls.getMethod(methodName, parameterTypes);
+        } catch (SecurityException | NoSuchMethodException e) {
+            return null;
+        }
+    }
 
+    public static void printAllParents(Class<?> cls) {
+        System.out.println("PrintAllParents:");
+        while (cls != null) {
+            System.out.println(cls.getName());
+            cls = cls.getSuperclass();
+        }
     }
 }
 ----
 
-...
+Метод `dumpEverything` выводит на экран список всех методов и полей класса указанным названием
+
+Для демонстрации его работы в класс `Main` был добавлен следующий код
+
+.Пример в классе Main
+[source, java]
+----
+Dump.dumpEverything(m1.getClass().getName());
+Dump.dumpEverything(m1.getClass().getSuperclass().getName());
+----
+
+.Результат работы примера
+[source, java]
+----
+----------------------------ru.rsatu.oop.Euro----------------------------
+----------------------------Methods----------------------------
+public java.lang.String ru.rsatu.oop.Euro.toString()
+public void ru.rsatu.oop.Euro.printInfo()
+public float ru.rsatu.oop.Money.getValue()
+public static int ru.rsatu.oop.Money.compare(ru.rsatu.oop.Money,ru.rsatu.oop.Money)
+public float ru.rsatu.oop.Money.getCurrency()
+public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+public final void java.lang.Object.wait() throws java.lang.InterruptedException
+public boolean java.lang.Object.equals(java.lang.Object)
+public native int java.lang.Object.hashCode()
+public final native java.lang.Class java.lang.Object.getClass()
+public final native void java.lang.Object.notify()
+public final native void java.lang.Object.notifyAll()
+----------------------------Fields----------------------------
+----------------------------ru.rsatu.oop.Money----------------------------
+----------------------------Methods----------------------------
+public java.lang.String ru.rsatu.oop.Money.toString()
+public float ru.rsatu.oop.Money.getValue()
+public static int ru.rsatu.oop.Money.compare(ru.rsatu.oop.Money,ru.rsatu.oop.Money)
+public float ru.rsatu.oop.Money.getCurrency()
+public abstract void ru.rsatu.oop.Money.printInfo()
+public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+public final void java.lang.Object.wait() throws java.lang.InterruptedException
+public boolean java.lang.Object.equals(java.lang.Object)
+public native int java.lang.Object.hashCode()
+public final native java.lang.Class java.lang.Object.getClass()
+public final native void java.lang.Object.notify()
+public final native void java.lang.Object.notifyAll()
+----------------------------Fields----------------------------
+protected float ru.rsatu.oop.Money.value
+protected float ru.rsatu.oop.Money.currency
+protected java.lang.String ru.rsatu.oop.Money.name
+----
+
+Метод `getSomeMethod` позволяет получить метод класса по указанному имени
+
+Для демонстрации его работы в класс `Main` был добавлен следующий код
+
+.Пример в классе Main
+[source,java]
+----
+Method meth = Dump.getSomeMethod(m1.getClass(), "getValue");
+try {
+    System.out.println("\n\nReflection call getValue: " + meth.invoke(m1));
+} catch (InvocationTargetException | IllegalAccessException e) {
+    e.printStackTrace();
+}
+
+meth = Dump.getSomeMethod(Money.class, "compare", Money.class, Money.class);
+try {
+    System.out.println("Reflection static call compare: " + meth.invoke(null,m2,m1)+'\n');
+} catch (InvocationTargetException | IllegalAccessException e) {
+    e.printStackTrace();
+}
+----
+
+.Результат выполнения примера
+[source]
+----
+
+
+Reflection call getValue: 100.0
+Reflection static call compare: 1
+
+----
+
+Метод `printAllParents` выводит всех предков указанного класса
+
+Для демонстрации его работы в класс `Main` был добавлен следующий код
+
+.Пример в классе Main
+[source,java]
+----
+Dump.printAllParents(m1.getClass());
+Dump.printAllParents(m2.getClass());
+----
+
+.Результат выполнения примера
+[source]
+----
+PrintAllParents:
+ru.rsatu.oop.Euro
+ru.rsatu.oop.Money
+java.lang.Object
+PrintAllParents:
+ru.rsatu.oop.Dollar
+ru.rsatu.oop.Money
+java.lang.Object
+----
 
 === 3.3 Задание 3
 

@@ -23,7 +23,19 @@ public class Dump {
         }
     }
 
-    public static void callSomeMethods() {
+    public static Method getSomeMethod(Class<?> cls, String methodName, Class... parameterTypes) {
+        try {
+            return cls.getMethod(methodName, parameterTypes);
+        } catch (SecurityException | NoSuchMethodException e) {
+            return null;
+        }
+    }
 
+    public static void printAllParents(Class<?> cls) {
+        System.out.println("PrintAllParents:");
+        while (cls != null) {
+            System.out.println(cls.getName());
+            cls = cls.getSuperclass();
+        }
     }
 }
